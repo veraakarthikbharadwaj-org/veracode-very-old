@@ -1,0 +1,54 @@
+name: Veracode Static Code Analysis
+
+run-name: Static Code Analysis - ${{ github.event.client_payload.repository.name }}
+
+on:
+  repository_dispatch:
+    types: [java-maven-pipeline-scan, 
+            java-gradle-pipeline-scan, 
+            source-code-pipeline-scan, 
+            dot-net-pipeline-scan, 
+            go-pipeline-scan, 
+            dot-net-policy-scan, 
+            java-maven-policy-scan, 
+            java-gradle-policy-scan, 
+            source-code-policy-scan, 
+            go-policy-scan,
+            dot-net-pipeline-scan-notifs]
+
+jobs:
+  register:
+    uses: ./.github/workflows/veracode-check-run.yml
+    with:
+      check_run_name: ${{ github.workflow }}
+      head_sha: ${{ github.event.client_payload.sha }}
+      repositroy_owner: ${{ github.event.client_payload.repository.owner }}
+      repositroy_name: ${{ github.event.client_payload.repository.name }}
+      event_type: ${{ github.event.client_payload.event_type }}
+      github_token: ${{ github.event.client_payload.token }}
+      run_id: ${{ github.run_id }}
+        
+  build:
+    needs: register
+    uses: ./.github/workflows/veracode-build-logic.yml
+    with:
+      group_name: ${{ github.event.client_payload.group_name }}
+
+  pipeline_scan:
+    # needs the build step before this job will start running
+    needs: build
+    if: contains(github.event.action, 'pipeline')
+    uses: ./.github/workflows/veracode-pipeline-scan.yml
+    with:
+      policy_name: ${{ github.event.client_payload.policy_name }}
+    secrets: inherit
+    
+  policy_scan:
+    needs: build
+    if: contains(github.event.action, 'policy')
+    uses: ./.github/workflows/veracode-policy-scan.yml
+    with:
+      profile_name: ${{ github.event.client_payload.profile_name }}
+      policy_name: ${{ github.event.client_payload.policy_name }}
+      moddules_to_scan: ${{ github.event.client_payload.modules_to_scan }}
+    secrets: inherit

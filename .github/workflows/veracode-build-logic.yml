@@ -1,0 +1,22 @@
+name: Identify Build Script
+
+on:
+  workflow_call:
+    inputs:
+      group_name: 
+        description: 'Group name - Label of the repository to which it belongs to'
+        required: true
+        type: string
+
+jobs:
+  notification-build-script:
+    if: ${{ inputs.group_name == 'notification' }}
+    uses: ./.github/workflows/veracode-build-notification.yml
+    with:
+        group_name: ${{ inputs.group_name }}
+  
+  order-build-script:
+    if: ${{ inputs.group_name == 'order' }}
+    uses: ./.github/workflows/veracode-build-order.yml
+    with:
+        group_name: ${{ inputs.group_name }}

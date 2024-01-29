@@ -1,0 +1,17 @@
+name: 'Invoke Custom/Default Build script - For order group'
+
+on:
+  workflow_call:
+    inputs:
+      group_name: 
+        description: 'Group name - Label of the repository to which it belongs to'
+        required: true
+        type: string
+
+jobs:
+  invoke-build-script:
+    runs-on: ubuntu-latest
+    steps:
+    - name: "Print Hello World"
+      run: echo "Hello, World!"
+      shell: bash
