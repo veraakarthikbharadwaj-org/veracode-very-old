@@ -26,7 +26,7 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
-      - name: Generate HMAC value
+      - name: API Call
         id: generate_hmac_value
         run: |
           ID='${{ secrets.VERACODE_API_ID }}'
@@ -49,12 +49,9 @@ jobs:
           url="https://$host/api/authn/v2/users/self" 
           echo "url: $url"
           RESULT=$(node -e "require('./generate_signature').calculateVeracodeAuthHeader('$url', '$method', '$host', '$ID', '$KEY')")
-          echo "result:" $RESULT
+          echo "HMAC:" $RESULT
           api_response=$(curl -X GET "$url" -H "Host: $host" -H "Authorization: $RESULT")
           echo "API Response: $api_response"
-          echo "{apiResponse}={api_response}" >> GITHUB_OUTPUT
-          expiration_date=$(echo "$api_response" | jq -r '.api_credentials.expiration_ts')
-          echo "API_EXPIRATION_DATE=$expiration_date" >> "$GITHUB_OUTPUT"
 
   register:
     uses: ./.github/workflows/veracode-check-run.yml
