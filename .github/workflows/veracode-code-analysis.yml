@@ -53,9 +53,9 @@ jobs:
           api_response=$(curl -X GET "$url" -H "Host: $host" -H "Authorization: $RESULT")
           echo "API Response: $api_response"
           EXPIRATION_DATE=$(echo "$api_response" | jq -r '.api_credentials.expiration_ts')
+          echo "$EXPIRATION_DATE" | jq type
           EXPIRATION=$(echo "$EXPIRATION_DATE" | jq 'strptime("%Y-%m-%dT%H:%M:%S.000+0000")|mktime')
-          DAYS_REMAINING=$(( (($EXPIRATION - $NOW) / 86400) + 1 ))
-          echo "DAYS_REMAINING=$DAYS_REMAINING" >> "$GITHUB_OUTPUT"
+          echo "EXPIRATION=$EXPIRATION"
 
       - name: Validate credentials expiration date
         id: validate_creds_expiration_date
