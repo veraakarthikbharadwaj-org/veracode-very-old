@@ -52,7 +52,7 @@ jobs:
           echo "HMAC:" $RESULT
           api_response=$(curl -X GET "$url" -H "Host: $host" -H "Authorization: $RESULT")
           expiration_date=$(echo "$api_response" | jq -r '.api_credentials.expiration_ts')
-          expiration=$(date -d "$expiration_date" "+%Y-%m-%dT%H:%M:%S.000+0000")
+          expiration="2023-02-09T05:42:37.000+0000"
           echo "expiration=$expiration" >> "$GITHUB_OUTPUT"
           current_date_time=$(date '+%Y-%m-%dT%H:%M:%S.000+0000')
           if [[ "$current_date_time" < "$expiration" ]]; then
