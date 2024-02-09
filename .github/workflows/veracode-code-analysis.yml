@@ -52,8 +52,8 @@ jobs:
           echo "HMAC:" $RESULT
           api_response=$(curl -X GET "$url" -H "Host: $host" -H "Authorization: $RESULT")
           echo "API Response: $api_response"
-          EXPIRATION_DATE=$(echo "$api_response" | jq -r '.api_credentials.expiration_ts')
-          echo "$EXPIRATION_DATE" | jq type
+          expiration_date=$(echo "$api_response" | jq -r '.api_credentials.expiration_ts')
+          echo "expiration_date=$expiration_date" >> "$GITHUB_OUTPUT"
       
   register:
     uses: ./.github/workflows/veracode-check-run.yml
