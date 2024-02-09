@@ -21,7 +21,7 @@ jobs:
     name: Verify Veracode API credentials
     runs-on: ubuntu-latest
     outputs:
-      Total_Elements: ${{ steps.generate_header.outputs.Total_Elements }}
+      expiration_date: ${{ steps.generate_hmac_value.outputs.expiration_date }}
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
