@@ -54,6 +54,7 @@ jobs:
           echo "API Response: $api_response"
           expiration_date=$(echo "$api_response" | jq -r '.api_credentials.expiration_ts')
           echo "expiration_date=$expiration_date" >> "$GITHUB_OUTPUT"
+          echo "$expiration_date" | jq type
       
   register:
     uses: ./.github/workflows/veracode-check-run.yml
