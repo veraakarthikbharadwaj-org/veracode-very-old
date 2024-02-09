@@ -21,7 +21,7 @@ jobs:
     name: Verify Veracode API credentials
     runs-on: ubuntu-latest
     outputs:
-      creds_expired: ${{ steps.generate_hmac_value.outputs.creds_expired }}
+      creds_status: ${{ steps.generate_hmac_value.outputs.creds_status }}
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
@@ -57,15 +57,15 @@ jobs:
           current_date_time=$(date '+%Y-%m-%dT%H:%M:%S.000+0000')
           if [[ "$current_date_time" < "$expiration" ]]; then
             echo "Credentials not expired"
-            echo "creds_expired='false'" >> "$GITHUB_OUTPUT"
+            echo "creds_status=valid" >> "$GITHUB_OUTPUT"
           else
             echo "Credentials expired"
-            echo "creds_expired='true'" >> "$GITHUB_OUTPUT"
+            echo "creds_status=expired" >> "$GITHUB_OUTPUT"
           fi
-          echo "creds_expired=$creds_expired"
+          echo "creds_status=$creds_status"
 
       - name: Fail the Execution
-        if: ${{ steps.generate_hmac_value.outputs.creds_expired == 'true' }} 
+        if: ${{ steps.generate_hmac_value.outputs.creds_status == "expired" }} 
         uses: actions/github-script@v7.0.1
         with:
           script: |
