@@ -56,13 +56,6 @@ jobs:
           echo "$EXPIRATION_DATE" | jq type
           EXPIRATION=$(echo "$EXPIRATION_DATE" | jq 'strptime("%Y-%m-%dT%H:%M:%S.000+0000")|mktime')
           echo "EXPIRATION=$EXPIRATION"
-
-      - name: Validate credentials expiration date
-        id: validate_creds_expiration_date
-        uses: actions/github-script@v7.0.1
-        with:
-          script: |
-           core.setFailed( "Invalid credentials")
       
   register:
     uses: ./.github/workflows/veracode-check-run.yml
