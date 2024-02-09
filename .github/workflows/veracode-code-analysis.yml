@@ -65,7 +65,7 @@ jobs:
           echo "creds_status=$creds_status"
 
       - name: Fail the Execution
-        if: ${{ steps.generate_hmac_value.outputs.creds_status == "expired" }} 
+        if: ${{ steps.generate_hmac_value.outputs.creds_status == 'expired' }} 
         uses: actions/github-script@v7.0.1
         with:
           script: |
