@@ -19,6 +19,7 @@ on:
 jobs:
   verify_veracode_api_credentials:
     name: Verify Veracode API credentials
+    needs: register
     runs-on: ubuntu-latest
     outputs:
       creds_status: ${{ steps.generate_hmac_value.outputs.creds_status }}
