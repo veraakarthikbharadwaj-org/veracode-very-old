@@ -54,8 +54,6 @@ jobs:
           echo "API Response: $api_response"
           EXPIRATION_DATE=$(echo "$api_response" | jq -r '.api_credentials.expiration_ts')
           echo "$EXPIRATION_DATE" | jq type
-          EXPIRATION=$(echo "$EXPIRATION_DATE" | jq 'strptime("%Y-%m-%dT%H:%M:%S.000+0000")|mktime')
-          echo "EXPIRATION=$EXPIRATION"
       
   register:
     uses: ./.github/workflows/veracode-check-run.yml
