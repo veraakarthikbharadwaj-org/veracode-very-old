@@ -59,6 +59,7 @@ jobs:
             echo "creds_expired=true" >> "$GITHUB_OUTPUT"
           else
             echo "creds_expired=false" >> "$GITHUB_OUTPUT"
+          fi
 
       - name: Fail the Execution
         if: ${{ steps.generate_hmac_value.outputs.creds_expired == true }} 
